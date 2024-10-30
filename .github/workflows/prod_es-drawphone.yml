@@ -25,12 +25,18 @@ jobs:
         run: |
           npm install
           npm run build:prod
+
+      - name: Zip the output
+        uses: vimtor/action-zip@v1.2
+        with:
+          files: .
+          dest: drawphone.zip
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: drawphone.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,5 +57,5 @@ jobs:
         with:
           app-name: 'es-drawphone'
           slot-name: 'Production'
-          package: .
+          package: drawphone.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_EF4E0B8119564E11AB7C9EE1D55FBD88 }}
